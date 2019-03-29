@@ -3,6 +3,12 @@
 ## 依赖项
 - exif-js
 
+## 安装
+``` shell
+$ npm install clearexif --save
+```
+
+
 ## 使用说明
 ``` javascript 
 	const ClearExif = require('ClearExif');
@@ -14,7 +20,6 @@
 ```
 
 ## 配置项
-
 ``` javascript
 	let exif = new ClearExif(file, type, quality);
 	file: 为原始图片File对象
