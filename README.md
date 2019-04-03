@@ -11,10 +11,10 @@ $ npm install clearexif --save
 
 ## 使用说明
 ``` javascript 
-	const ClearExif = require('ClearExif');
+	import  ClearExif from 'clearexif'
 	let exif = new ClearExif(file, type, quality);
-	ClearExif.getImage(base64 => {
-		// 这里是处理后的image base64
+	exif.getImage(base64 => {
+		// 这里是处理后的image base64 后续可以对Base64 转换成Blob和File对象
 	});
 
 ```

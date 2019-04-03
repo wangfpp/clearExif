@@ -17,27 +17,26 @@ class ClearExif {
 		let Orientation, base64; //图片的方向,返回的值
 		//去获取拍照时的信息，解决拍出来的照片旋转问题
 		EXIF.getData(file, function () {
-			let obj = EXIF.getAllTags(file)
 			Orientation = EXIF.getTag(this, 'Orientation');
-		});
-		if (!file || !window.FileReader) return;
-		if (/^image/.test(file.type)) {
-			let reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = function () {
-				let result = this.result;
-				if (!Orientation) { // 没有旋转直接返回
-					callback(result);
-				} else {
-					let img = new Image();
-					img.src = result;
-					img.onload = function () {
-					base64 = self.modifyRotate(img, Orientation);
-						callback(base64);
+			if (!file || !window.FileReader) return;
+			if (/^image/.test(file.type)) {
+				let reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onloadend = function () {
+					let result = this.result;
+					if (!Orientation) { // 没有旋转直接返回
+						callback(result);
+					} else {
+						let img = new Image();
+						img.src = result;
+						img.onload = function () {
+						base64 = self.modifyRotate(img, Orientation);
+							callback(base64);
+						}
 					}
 				}
 			}
-		}
+		});
 	}
 
 	modifyRotate(img, Orientation) {
@@ -143,8 +142,4 @@ class ClearExif {
 		}
 	}
 };
- module.exports = { ClearExif };
-
-
-
-
+export default ClearExif;
