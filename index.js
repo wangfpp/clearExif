@@ -25,13 +25,13 @@ class ClearExif {
 				reader.onloadend = function () {
 					let result = this.result;
 					if (!Orientation) { // 没有旋转直接返回
-						callback(this.mutilyfile(result));
+						callback(self.mutilyfile(result));
 					} else {
 						let img = new Image();
 						img.src = result;
 						img.onload = function () {
 							base64 = self.modifyRotate(img, Orientation);
-							callback(this.mutilyfile(base64));
+							callback(self.mutilyfile(base64));
 						}
 					}
 				}
@@ -44,8 +44,8 @@ class ClearExif {
 			file: '',
 			blob: ''
 		};
-		obj.base = base64;
-		obj.file = this.dataURLtoFile(base64, this.filename);
+		obj.base64 = base64;
+		obj.file = this.dataURLtoFile(base64, this.file.name);
 		obj.blob = this.convertBase64UrlToBlob(base64, this.type);
 		return obj;
 	}
