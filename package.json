@@ -1,6 +1,6 @@
 {
   "name": "clearexif",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "clear image EXIF",
   "main": "index.js",
   "scripts": {

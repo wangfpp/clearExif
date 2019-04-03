@@ -13,8 +13,20 @@ $ npm install clearexif --save
 ``` javascript 
 	import  ClearExif from 'clearexif'
 	let exif = new ClearExif(file, type, quality);
-	exif.getImage(base64 => {
-		// 这里是处理后的image base64 后续可以对Base64 转换成Blob和File对象
+	exif.getImage(fileObj => {
+		// 这里返回了3种数据 
+		// fileObj = {
+		// 	base64: base64编码的图片,
+		// 	blob: 类文件对象, Blob {size: Number, type: String}
+		// 	file: File对象 File 
+		// 		{
+		// 			lastModified: 1554284903407
+		// 			lastModifiedDate: Wed Apr 03 2019 17:48:23 GMT+0800 (中国标准时间)
+		// 			name: "ada661d6-1924-11e9-9ade-107b44aff8a6.jpeg"
+		// 			size: 490675
+		// 			type: "image/jpeg"
+		// 			webkitRelativePath: ""
+		// 		}
 	});
 
 ```

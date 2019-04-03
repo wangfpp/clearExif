@@ -6,14 +6,14 @@
 */
 const EXIF = require('exif-js');
 class ClearExif {
-	constructor(img, type, quality) { // 类的构造方法
-		this.img = img;
+	constructor(file, type, quality) { // 类的构造方法
+		this.file = file;
 		this.type = type;
 		this.quality = quality ? quality : 1;
 	}
 	getImage(callback)  {
 		let self = this;
-		let file = this.img;
+		let file = this.file;
 		let Orientation, base64; //图片的方向,返回的值
 		//去获取拍照时的信息，解决拍出来的照片旋转问题
 		EXIF.getData(file, function () {
@@ -25,20 +25,30 @@ class ClearExif {
 				reader.onloadend = function () {
 					let result = this.result;
 					if (!Orientation) { // 没有旋转直接返回
-						callback(result);
+						callback(this.mutilyfile(result));
 					} else {
 						let img = new Image();
 						img.src = result;
 						img.onload = function () {
-						base64 = self.modifyRotate(img, Orientation);
-							callback(base64);
+							base64 = self.modifyRotate(img, Orientation);
+							callback(this.mutilyfile(base64));
 						}
 					}
 				}
 			}
 		});
 	}
-
+	mutilyfile(base64) {
+		let obj = {
+			base64: '',
+			file: '',
+			blob: ''
+		};
+		obj.base = base64;
+		obj.file = this.dataURLtoFile(base64, this.filename);
+		obj.blob = this.convertBase64UrlToBlob(base64, this.type);
+		return obj;
+	}
 	modifyRotate(img, Orientation) {
 		let self = this;
 		let canvas = document.createElement("canvas"), ctx = canvas.getContext('2d'),
@@ -141,5 +151,23 @@ class ClearExif {
 				break;
 		}
 	}
+	dataURLtoFile(dataurl, filename) {//将base64转换为文件
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+	}
+	convertBase64UrlToBlob(urlData, type) {   // base64TOBolb
+        var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte  
+        //处理异常,将ascii码小于0的转换为大于0  
+        var ab = new ArrayBuffer(bytes.length);  
+        var ia = new Uint8Array(ab);  
+        for (var i = 0; i < bytes.length; i++) {  
+            ia[i] = bytes.charCodeAt(i);  
+        }
+        return new Blob( [ab] , {type : type}); 
+    }
 };
 export default ClearExif;
