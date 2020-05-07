@@ -12,7 +12,8 @@
   },
   "keywords": [
     "EXIF",
-    "clear"
+    "clear",
+    "zk-tools"
   ],
   "author": "wangfpp@gmail.com",
   "license": "ISC",

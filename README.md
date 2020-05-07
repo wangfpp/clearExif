@@ -12,8 +12,9 @@ $ npm install clearexif --save
 ## 使用说明
 ``` javascript 
 	import  ClearExif from 'clearexif'
-	let exif = new ClearExif(file, type, quality);
+	let exif = new ClearExif(file, type, quality, dataList = ['file', 'base64', 'bolb']);
 	exif.getImage(fileObj => {
+		// 根据dataList进行数据返回 默认全部返回
 		// 这里返回了3种数据 
 		// fileObj = {
 		// 	base64: base64编码的图片,
@@ -33,9 +34,9 @@ $ npm install clearexif --save
 
 ## 配置项
 ``` javascript
-	let exif = new ClearExif(file, type, quality);
-	file: 为原始图片File对象
-	type: 最终想要得到的图片格式  'image/jpeg' 'image/png'
-	quality: 0-1 压缩图片 值越小压缩越严重
-
+	let exif = new ClearExif(file, type, quality, dataList);
+	file: File, // 为原始图片File对象
+	type:  String, // 最终想要得到的图片格式  'image/jpeg' 'image/png'
+	quality:  Number, 0-1 // 压缩图片 值越小压缩越严重
+	dataList:  ['file', 'base64', 'bolb'] // 要得到的数据类型
 ```

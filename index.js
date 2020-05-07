@@ -1,16 +1,28 @@
 /*
 * @Author: wangfpp
 * @Date:   2019-03-29 20:46:58
-* @Last Modified by:   wangfpp
-* @Last Modified time: 2019-03-29 22:35:36
+ * @Last Modified by: wangfpp
+ * @Last Modified time: 2020-05-07 11:20:28
 */
 const EXIF = require('exif-js');
 class ClearExif {
-	constructor(file, type, quality) { // 类的构造方法
+	/**
+	 * 
+	 * @param {File} file 原始图片 
+	 * @param {String} type 想得到的图片类型 
+	 * @param {Number} quality 图片压缩值 
+	 * @param {String} dataType 输出的图片类型  ['file', 'base64', 'blob']
+	 */
+	constructor(file, type, quality, dataType) { // 类的构造方法
 		this.file = file;
-		this.type = type;
+		this.type = type || 'image/png';
 		this.quality = quality ? quality : 1;
+		this.dataType = dataType || ['file', 'base64', 'blob'];
 	}
+	/**
+	 * @description 对图片进行处理
+	 * @param {Function} callback 
+	 */
 	getImage(callback)  {
 		let self = this;
 		let file = this.file;
@@ -38,17 +50,34 @@ class ClearExif {
 			}
 		});
 	}
+	/**
+	 * @description 返回多种数据类型的图片
+	 * @param {String} base64 
+	 */
 	mutilyfile(base64) {
-		let obj = {
-			base64: '',
-			file: '',
-			blob: ''
+		let fileTypeList = this.dataType,
+		obj = {
 		};
-		obj.base64 = base64;
-		obj.file = this.dataURLtoFile(base64, this.file.name);
-		obj.blob = this.convertBase64UrlToBlob(base64, this.type);
+		if (!(Array.isArray(fileTypeList) && fileTypeList.length)) {
+			obj.file = this.dataURLtoFile(base64, this.file.name);
+			return obj;
+		}
+		if (fileTypeList.includes('file')) {
+			obj.file = this.dataURLtoFile(base64, this.file.name);
+		}
+		if (fileTypeList.includes('blob')) {
+			obj.blob = this.convertBase64UrlToBlob(base64, this.type);
+		}
+		if (fileTypeList.includes('base64')) {
+			obj.base64 = base64;
+		}	
 		return obj;
 	}
+	/**
+	 * @description 对图片进行旋转处理
+	 * @param {Object} img 
+	 * @param {Number} Orientation 
+	 */
 	modifyRotate(img, Orientation) {
 		let self = this;
 		let canvas = document.createElement("canvas"), ctx = canvas.getContext('2d'),
